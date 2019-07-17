@@ -2,8 +2,8 @@
 WorldInfo {
 }
 Viewpoint {
-  orientation 0.1864421772291603 -0.9670689444145784 -0.17325406575005262 4.752254971538175
-  position 2.987341079328611 1.8587079507728206 -0.11272229633133729
+  orientation 0.8194537144418703 -0.4923934566000803 -0.2933330765270882 5.0259716042276015
+  position 2.5497929296639557 3.656954828582798 1.3322735935422858
 }
 TexturedBackground {
 }
@@ -24,7 +24,7 @@ Robot {
         radius 0.14
       }
     }
-    Group {
+    DEF TOP_TANK Group {
       children [
         DEF TOP1 Transform {
           translation 0 0.07000000000000003 0
@@ -67,16 +67,53 @@ Robot {
               endPoint Solid {
                 translation 0.07 0.01 0
                 children [
-                  DistanceSensor {
-                    translation -0.02 0 0
+                  DEF SENSORS Group {
                     children [
-                      Shape {
+                      DEF BARRA Shape {
                         appearance PBRAppearance {
                           baseColor 0 0 0
                         }
                         geometry Box {
-                          size 0.1 0.02 0.1
+                          size 0.08 0.02 0.06
                         }
+                      }
+                      DEF DIS_SENSORS Transform {
+                        children [
+                          DEF DS_LEFT DistanceSensor {
+                            translation 0.04 0 0.03
+                            children [
+                              Shape {
+                                appearance DEF PINK PBRAppearance {
+                                  baseColor 0.9333333333333333 0.33600366216525523 0.33600366216525523
+                                }
+                                geometry DEF BOX_DS Box {
+                                  size 0.02 0.02 0.02
+                                }
+                              }
+                            ]
+                            name "ds_left"
+                            lookupTable [
+                              0.05 0 0
+                              0.4 255 0
+                            ]
+                            resolution 1
+                          }
+                          DEF DS_RIGHT DistanceSensor {
+                            translation 0.04 0 -0.03
+                            children [
+                              Shape {
+                                appearance USE PINK
+                                geometry USE BOX_DS
+                              }
+                            ]
+                            name "ds_right"
+                            lookupTable [
+                              0.05 0 0
+                              0.4 255 0
+                            ]
+                            resolution 1
+                          }
+                        ]
                       }
                     ]
                   }
@@ -114,14 +151,43 @@ Robot {
                 translation 0.1100000004315407 0.030000001438469 0
                 rotation 0 0 0.9999999999999999 4.712388966
                 children [
-                  Shape {
-                    appearance DEF PINE_GREEN RoughPine {
-                      colorOverride 0.010070954451819639 0.5033340962844282 0.15786984054322117
-                    }
-                    geometry Cylinder {
-                      height 0.25
-                      radius 0.015
-                    }
+                  Group {
+                    children [
+                      Shape {
+                        appearance DEF PINE_GREEN RoughPine {
+                          colorOverride 0.010070954451819639 0.5033340962844282 0.15786984054322117
+                        }
+                        geometry Cylinder {
+                          height 0.25
+                          radius 0.015
+                        }
+                      }
+                      DEF GUN_BAR_DS Transform {
+                        children [
+                          DEF GUN_DS DistanceSensor {
+                            translation 6.233365214768519e-10 0.12999999999999995 0
+                            rotation 0 0 -1 4.7123890043591725
+                            children [
+                              Shape {
+                                appearance PBRAppearance {
+                                  baseColor 0 0 0
+                                }
+                                geometry Box {
+                                  size 0.02 0.02 0.02
+                                }
+                              }
+                            ]
+                            name "ds_gun"
+                            lookupTable [
+                              0 0 0
+                              0.1 0 0
+                              2 1023 0
+                            ]
+                            resolution 1
+                          }
+                        ]
+                      }
+                    ]
                   }
                 ]
                 name "solid(4)"

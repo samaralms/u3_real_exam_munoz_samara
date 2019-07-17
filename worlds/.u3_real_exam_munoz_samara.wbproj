@@ -9,4 +9,4 @@ selectionDisabled: 0
 viewpointLocked: 0
 orthographicViewHeight: 1
 textFiles: 0 "controllers/u3_real_exam_munoz_samara/u3_real_exam_munoz_samara.c"
-globalOptionalRendering: JointAxes::DistanceSensorRays
+globalOptionalRendering: JointAxes::DistanceSensorRays::CoordinateSystem
