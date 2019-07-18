@@ -2,8 +2,8 @@
 WorldInfo {
 }
 Viewpoint {
-  orientation 0.8194537144418703 -0.4923934566000803 -0.2933330765270882 5.0259716042276015
-  position 2.5497929296639557 3.656954828582798 1.3322735935422858
+  orientation 0.6207629059927372 -0.748307619878503 -0.23385705158327333 5.350399536776579
+  position 2.731873439937038 3.401706682568672 2.5091649053350573
 }
 TexturedBackground {
 }
@@ -11,9 +11,16 @@ TexturedBackgroundLight {
 }
 Floor {
 }
+Solid {
+  translation 0 0 -2.6600000000000015
+  scale 0.3 0.3 0.3
+  children [
+    PhoneBooth {
+    }
+  ]
+}
 Robot {
   translation 0 0.10000000000000002 0
-  rotation 0 1 0 1.0471975479999998
   children [
     DEF BODY Shape {
       appearance DEF PINE_GREEN RoughPine {
@@ -58,14 +65,15 @@ Robot {
               }
               device [
                 PositionSensor {
-                  name "ds_position"
+                  name "mobile_position"
                 }
                 RotationalMotor {
-                  name "ds_motor"
+                  name "mobile_motor"
                 }
               ]
               endPoint Solid {
-                translation 0.07 0.01 0
+                translation 0.001703708443917297 0.019999999999999997 -0.10294095400591444
+                rotation 0 1 0 1.570796283640826
                 children [
                   DEF SENSORS Group {
                     children [
@@ -77,39 +85,24 @@ Robot {
                           size 0.08 0.02 0.06
                         }
                       }
-                      DEF DIS_SENSORS Transform {
+                      DEF DIS_MOB Transform {
                         children [
-                          DEF DS_LEFT DistanceSensor {
-                            translation 0.04 0 0.03
+                          DEF DS_MOBILE DistanceSensor {
+                            translation 0.04 0 -3.469446951953614e-18
                             children [
                               Shape {
                                 appearance DEF PINK PBRAppearance {
                                   baseColor 0.9333333333333333 0.33600366216525523 0.33600366216525523
                                 }
                                 geometry DEF BOX_DS Box {
-                                  size 0.02 0.02 0.02
+                                  size 0.02 0.02 0.04
                                 }
                               }
                             ]
-                            name "ds_left"
+                            name "ds_mobile"
                             lookupTable [
-                              0.05 0 0
-                              0.4 255 0
-                            ]
-                            resolution 1
-                          }
-                          DEF DS_RIGHT DistanceSensor {
-                            translation 0.04 0 -0.03
-                            children [
-                              Shape {
-                                appearance USE PINK
-                                geometry USE BOX_DS
-                              }
-                            ]
-                            name "ds_right"
-                            lookupTable [
-                              0.05 0 0
-                              0.4 255 0
+                              0.1 0 0
+                              2 1023 0
                             ]
                             resolution 1
                           }
@@ -148,8 +141,8 @@ Robot {
                 }
               ]
               endPoint Solid {
-                translation 0.1100000004315407 0.030000001438469 0
-                rotation 0 0 0.9999999999999999 4.712388966
+                translation -1.150775107150448e-09 0.03000000302078501 -0.10999999841768404
+                rotation -0.5773502664212908 0.5773502747262954 -0.5773502664212908 2.094395119003205
                 children [
                   Group {
                     children [
@@ -162,31 +155,6 @@ Robot {
                           radius 0.015
                         }
                       }
-                      DEF GUN_BAR_DS Transform {
-                        children [
-                          DEF GUN_DS DistanceSensor {
-                            translation 6.233365214768519e-10 0.12999999999999995 0
-                            rotation 0 0 -1 4.7123890043591725
-                            children [
-                              Shape {
-                                appearance PBRAppearance {
-                                  baseColor 0 0 0
-                                }
-                                geometry Box {
-                                  size 0.02 0.02 0.02
-                                }
-                              }
-                            ]
-                            name "ds_gun"
-                            lookupTable [
-                              0 0 0
-                              0.1 0 0
-                              2 1023 0
-                            ]
-                            resolution 1
-                          }
-                        ]
-                      }
                     ]
                   }
                 ]
@@ -196,6 +164,26 @@ Robot {
           ]
         }
       ]
+    }
+    DEF DS_DOWN DistanceSensor {
+      translation 0.005884569420668858 0 -0.1399999951674819
+      rotation 0 -1 0 4.712389004359173
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.9333333333333333 0.33600366216525523 0.33600366216525523
+          }
+          geometry Box {
+            size 0.04 0.02 0.1
+          }
+        }
+      ]
+      name "ds_down"
+      lookupTable [
+        0.05 0 0
+        0.4 255 0
+      ]
+      resolution 1
     }
     DEF WH_1 Transform {
       translation 0 0 0.14
