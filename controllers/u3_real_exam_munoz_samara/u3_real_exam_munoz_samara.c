@@ -25,30 +25,25 @@
 #define TIME_STEP 64
 #define PI 3.14159
 
-#define OBSTACLE_DISTANCE 40.0
+#define OBSTACLE_DISTANCE 50.0
+#define ENEMY_DISTANCE 250.0
 
 enum {
   GO,
+  MOVE,
   TURN,
   FREEWAY,
-  OBSTACLE
+  CONTINUE,
+  OBSTACLE,
+  ENEMY,
 };
 
-int counter=0;
+
+
 
 double initial_angle_wheel1;
 
-//int dismob_value;
-//int disgun_value;
 
-float ReadMobileSensor=0;
-float ReadGunSensor=0;
-
-double down_distance=0;
-double mobile_distance=0;
-
-double  MobileMotor=0;
-double GunMotor=0;
 
 
 
@@ -60,6 +55,19 @@ int checkForObstacles(WbDeviceTag ds_down) {
   else
     return OBSTACLE;
 }
+
+
+int checkForEnemy(WbDeviceTag ds_mobile) {
+  double distance_mob = wb_distance_sensor_get_value(ds_mobile);
+
+  if (distance_mob > ENEMY_DISTANCE)
+    return CONTINUE;
+  else
+    return ENEMY;
+}
+
+
+
 
 void forwardRobot(WbDeviceTag *wheels) {
   wb_motor_set_position(wheels[0], INFINITY); 
@@ -73,12 +81,12 @@ void stopRobot(WbDeviceTag *wheels) {
   wb_motor_set_velocity(wheels[0], 0); 
   wb_motor_set_velocity(wheels[1], 0); 
   wb_motor_set_velocity(wheels[2], 0);
-  printf("Detecto Objeto\n");
+ 
 }
 void turnRobot(WbDeviceTag *wheels) { 
-  wb_motor_set_velocity(wheels[0], 5); 
-  wb_motor_set_velocity(wheels[1], 5); 
-  wb_motor_set_velocity(wheels[2], 3);
+  wb_motor_set_velocity(wheels[0], 6); 
+  wb_motor_set_velocity(wheels[1], 6); 
+  wb_motor_set_velocity(wheels[2], 2);
 }
 
 void onRadar(WbDeviceTag *mobmotor) { 
@@ -98,14 +106,15 @@ void offGun(WbDeviceTag *gunmotor) {
   wb_motor_set_velocity(gunmotor[0], 0); 
 }
 
+
 double getAngleRobot(WbDeviceTag pos_sensor) {
-  printf("Calculando angulo\n");
-  double angle, angle_wheel1, angle_wheel2;
+  printf("Calculate Angle\n");
+  double angle, angle_wheel1;
 
   angle_wheel1 = wb_position_sensor_get_value(pos_sensor);
-  //printf("Angle Wheel1: %lf\n", angle_wheel1);
+  printf("Angle Wheel1: %lf\n", angle_wheel1);
   angle = fabs(angle_wheel1 - initial_angle_wheel1);
-  //printf("Angle: %lf\n", angle);
+  printf("Angle: %lf\n", angle);
 
   return angle;
 }
@@ -113,6 +122,7 @@ double getAngleRobot(WbDeviceTag pos_sensor) {
 float clearAngleRobot() {
   printf("Clearing angle\n");
 }
+
 
 
 int main(int argc, char **argv)
@@ -141,6 +151,8 @@ int main(int argc, char **argv)
  // Encoder devices
   WbDeviceTag encoder = wb_robot_get_device("ps_1");
   wb_position_sensor_enable(encoder, TIME_STEP);
+ 
+  
 
   // Distance sensor devices
   WbDeviceTag dis_down = wb_robot_get_device("ds_down");
@@ -149,24 +161,20 @@ int main(int argc, char **argv)
   WbDeviceTag dis_mobile = wb_robot_get_device("ds_mobile");
   wb_distance_sensor_enable(dis_mobile, TIME_STEP);
   
-  
-  down_distance = wb_distance_sensor_get_value(dis_down);
-  mobile_distance =  wb_distance_sensor_get_value(dis_mobile);
-  
- 
-  MobileMotor = wb_position_sensor_get_value(mobMotor);
-  GunMotor = wb_position_sensor_get_value(gunMotor);
+
   
   
-  
-  //double ps_value;
+
+
+  double initial_angle_wheel1;
   short int ds_state, robot_state = GO;
-  //float velocity = 0.5;
   float angle;
-  float counter=0;
+ 
  
  
   while (wb_robot_step(TIME_STEP) != -1) {
+  
+ 
 
   
   
@@ -181,8 +189,8 @@ int main(int argc, char **argv)
         printf("Angle: %lf\n", angle);
       } 
       else if (ds_state == OBSTACLE) {
+        //stopRobot(wheels);
         robot_state = TURN;
-        stopRobot(wheels);
         printf("Obstacle Detected\n");
         initial_angle_wheel1 = wb_position_sensor_get_value(encoder);
       }
@@ -191,18 +199,41 @@ int main(int argc, char **argv)
         angle = getAngleRobot(encoder);
 
       if (angle >= 0.4*PI) {
-        robot_state = GO;
-        stopRobot(wheels);
+        //stopRobot(wheels);
+        robot_state = MOVE;
         clearAngleRobot();
       }
     }
     
-   
+    
+    if (robot_state == MOVE) {
+      ds_state = checkForEnemy(dis_mobile);
+
+      if (ds_state == CONTINUE) {
+        forwardRobot(wheels);
+        onRadar(mobmotor);
+        onGun(gunmotor);
+        
+      } 
+      else if (ds_state == ENEMY) {
+          stopRobot(wheels);
+          offRadar(mobmotor);
+          offGun(gunmotor);
+          printf("THA THA THA\n");
+       
+      }
+    } 
     
     
-            
-  printf("La distancia es = %f\n", dis_down);
+    
+    
+    
+    
+     
+  
   fflush(stdout); 
+  
+  
    
      //counter ++;
     
