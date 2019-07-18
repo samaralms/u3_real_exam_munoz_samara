@@ -55,7 +55,7 @@ Robot {
             }
           ]
         }
-        DEF TOP2 Transform {
+        DEF TOP2_DIS_GUN Transform {
           translation 0 0.15 0
           children [
             Shape {
@@ -83,7 +83,7 @@ Robot {
                 translation 0.001703708443917297 0.019999999999999997 -0.10294095400591444
                 rotation 0 1 0 1.570796283640826
                 children [
-                  DEF SENSORS Group {
+                  DEF SENSOR_GUN Group {
                     children [
                       DEF BARRA Shape {
                         appearance PBRAppearance {
@@ -95,7 +95,7 @@ Robot {
                       }
                       DEF DIS_MOB Transform {
                         children [
-                          DEF DS_MOBILE DistanceSensor {
+                          DEF DS_MOBILE_GUN DistanceSensor {
                             translation 0.04 0 -3.469446951953614e-18
                             children [
                               Shape {

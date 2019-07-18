@@ -1,0 +1,30 @@
+Data from Distance Sensors Given in Slack:
+
+----------------------Gun Distance(DEF TOP TANK)->(DEFTOP2_DIS_GUN)->(End Solid)->(SENSOR_GUN)-----
+
+Resolution: 10 bits
+
+Look Up Table Resolution: 2^(10)-1 = 1023  (2^(bit)-1)
+
+  0       0    0                             
+ 0.10     0    0
+  2     1023   0
+
+
+Range Given from 0.10 to 2 m.
+
+                                      
+
+--------------------Mobile Distance(DEF DS_DOWN)---------------------------------------------
+
+Resolution: 8 bits
+
+Look Up Table: 
+
+   0     0    0                 2^(bit)-1 ==>     2^(8)-1 = 255               
+ 0.05    0    0
+  0.4    255   0
+
+
+Range Given from: 0.05 to 0.4 cm.
+
