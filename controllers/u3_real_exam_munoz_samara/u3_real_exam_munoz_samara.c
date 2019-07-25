@@ -152,8 +152,6 @@ int main(int argc, char **argv)
   WbDeviceTag encoder = wb_robot_get_device("ps_1");
   wb_position_sensor_enable(encoder, TIME_STEP);
  
-  
-
   // Distance sensor devices
   WbDeviceTag dis_down = wb_robot_get_device("ds_down");
   wb_distance_sensor_enable(dis_down, TIME_STEP);
@@ -197,16 +195,14 @@ int main(int argc, char **argv)
         turnRobot(wheels);
         angle = getAngleRobot(encoder);
 
-     
-        if (angle >= 0.4*PI) {
+       if (angle >= 0.4*PI) {
           //stopRobot(wheels);
           robot_state = MOVE;
           clearAngleRobot();
         }
      }
     
-    
-      if (robot_state == MOVE) {
+       if (robot_state == MOVE) {
         ds_state = checkForEnemy(dis_mobile);
 
         if (ds_state == CONTINUE) {
@@ -224,7 +220,7 @@ int main(int argc, char **argv)
       } 
     
     fflush(stdout); 
-  //counter ++;
+ 
     };
 
   /* Enter your cleanup code here */
