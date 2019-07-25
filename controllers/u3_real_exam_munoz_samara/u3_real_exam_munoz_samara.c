@@ -175,74 +175,57 @@ int main(int argc, char **argv)
   while (wb_robot_step(TIME_STEP) != -1) {
   
  
-
-  
-  
-  if (robot_state == GO) {
+     if (robot_state == GO) {
       ds_state = checkForObstacles(dis_down);
 
+      
       if (ds_state == FREEWAY) {
         forwardRobot(wheels);
         onRadar(mobmotor);
         onGun(gunmotor);
         angle = wb_position_sensor_get_value(encoder);
         printf("Angle: %lf\n", angle);
-      } 
-      else if (ds_state == OBSTACLE) {
+      
+      } else if (ds_state == OBSTACLE) {
         //stopRobot(wheels);
         robot_state = TURN;
         printf("Obstacle Detected\n");
         initial_angle_wheel1 = wb_position_sensor_get_value(encoder);
       }
-    } else if (robot_state == TURN) {
+     
+      } else if (robot_state == TURN) {
         turnRobot(wheels);
         angle = getAngleRobot(encoder);
 
-      if (angle >= 0.4*PI) {
-        //stopRobot(wheels);
-        robot_state = MOVE;
-        clearAngleRobot();
-      }
-    }
+     
+        if (angle >= 0.4*PI) {
+          //stopRobot(wheels);
+          robot_state = MOVE;
+          clearAngleRobot();
+        }
+     }
     
     
-    if (robot_state == MOVE) {
-      ds_state = checkForEnemy(dis_mobile);
+      if (robot_state == MOVE) {
+        ds_state = checkForEnemy(dis_mobile);
 
-      if (ds_state == CONTINUE) {
+        if (ds_state == CONTINUE) {
         forwardRobot(wheels);
         onRadar(mobmotor);
         onGun(gunmotor);
         
-      } 
-      else if (ds_state == ENEMY) {
+        } else if (ds_state == ENEMY) { 
           stopRobot(wheels);
           offRadar(mobmotor);
           offGun(gunmotor);
           printf("THA THA THA\n");
        
-      }
-    } 
+        }
+      } 
     
-    
-    
-    
-    
-    
-     
-  
-  fflush(stdout); 
-  
-  
-   
-     //counter ++;
-    
-    
-
-  
-
-
-  };
+    fflush(stdout); 
+  //counter ++;
+    };
 
   /* Enter your cleanup code here */
 
